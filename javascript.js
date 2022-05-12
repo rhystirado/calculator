@@ -96,6 +96,11 @@ function displayOperator() {
   });
 }
 
+// Update display with a result
+function updateDisplay(result) {
+  display.textContent = result;
+}
+
 // Clear display when clear button is pressed
 const clearButton = buttons.find(button => button.textContent === 'AC');
 clearButton.addEventListener('click', clearDisplay);
@@ -116,12 +121,21 @@ function splitInput(str) {
   return input;
 }
 
+const result = 0;
+
 // Get the display string and compute the answer
-function compute(str) {
+function compute() {
   // Get input from calculator display
-  const input = splitInput(str);
-  return operate(input.operator, input.a, input.b);
+  const input = splitInput(display.textContent);
+  const result = operate(input.operator, input.a, input.b);
+  // Update display
+  updateDisplay(result);
+  console.log(result);
 }
+
+// Compute when the equals button is pressed
+const equalsButton = buttons.find(button => button.textContent === '=');
+equalsButton.addEventListener('click', compute);
 
 
 // console.log(compute('1+2'));
