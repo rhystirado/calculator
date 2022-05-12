@@ -41,7 +41,8 @@ const calculatorContainer = document.querySelector('.calculator-container');
 // Add display to the calculator
 const display = document.createElement('div');
 display.classList.add('calculator-display');
-display.textContent = '1234567890';
+const displayText = '';
+display.textContent = displayText;
 calculatorContainer.append(display);
 
 // Add buttons to the calculator
@@ -56,4 +57,23 @@ for (const button of buttonList) {
   buttonElement.classList.add('calculator-button');
   buttonElement.textContent = button;
   calculatorContainer.append(buttonElement);
+}
+
+// 
+
+// Populate the display with the digits when pressed
+const buttons = Array.from(document.querySelectorAll('button'));
+const digitButtons = buttons.filter(button => {
+  return !isNaN(button.textContent) && button.textContent;
+});
+
+// Add event listener to each button to add digit to display
+digitButtons.forEach(button => {
+  button.addEventListener('click', displayDigit);
+})
+
+// Write digit to display
+function displayDigit() {
+  const digit = this.textContent;
+  display.textContent += digit;
 }
