@@ -114,8 +114,8 @@ function splitInput(str) {
   // Split on the operator and group the delimeter to keep it
   const parts = str.split(/([\+\-\*\/])/g);
   const input = {
-    a: parts[0],
-    b: parts[2],
+    a: parseInt(parts[0]),
+    b: parseInt(parts[2]),
     operator: parts[1]
   }
   return input;
