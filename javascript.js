@@ -1,10 +1,5 @@
-// Add an array of numbers together
-function add(arr) {
-  return arr.reduce((sum, current) => sum + current);
-}
-
 // Add two numbers together
-function addTwo(a, b) {
+function add(a, b) {
   return a + b;
 }
 
@@ -23,4 +18,23 @@ function divide(a, b) {
   return a / b;
 }
 
-console.log(add([1, 2, 3, 4]));
+// Takes an operator and two numbers and calls the appropriate function
+function operate(operator, a, b) {
+  switch (operator) {
+    case '+':
+      return add(a, b);
+    case '-':
+      return subtract(a, b);
+    case '*':
+      return multiply(a, b);
+    case '/':
+      return divide(a, b);
+    default:
+      return;
+  }
+}
+
+console.log(operate('+', 4, 2));
+console.log(operate('-', 4, 2));
+console.log(operate('*', 4, 2));
+console.log(operate('/', 4, 2));
