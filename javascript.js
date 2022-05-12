@@ -34,7 +34,26 @@ function operate(operator, a, b) {
   }
 }
 
-console.log(operate('+', 4, 2));
-console.log(operate('-', 4, 2));
-console.log(operate('*', 4, 2));
-console.log(operate('/', 4, 2));
+
+// Add grid positions to the container for the buttons
+const calculatorContainer = document.querySelector('.calculator-container');
+
+// Add display to the calculator
+const display = document.createElement('div');
+display.classList.add('calculator-display');
+display.textContent = '1234567890';
+calculatorContainer.append(display);
+
+// Add buttons to the calculator
+const buttonList = ['AC', '', '', '/',
+                    '7', '8', '9', '*',
+                    '4', '5', '6', '-',
+                    '1', '2', '3', '+',
+                    '0', '', '', '='];
+
+for (const button of buttonList) {
+  const buttonElement = document.createElement('button');
+  buttonElement.classList.add('calculator-button');
+  buttonElement.textContent = button;
+  calculatorContainer.append(buttonElement);
+}
