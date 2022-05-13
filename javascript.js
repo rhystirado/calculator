@@ -168,7 +168,7 @@ function operatorClicked() {
 
   // Perform operation if 'b' exists and the operator is not equal to 
   // the stored operator
-  if (data.operator && data.b) {
+  if (data.operator && !isNaN(data.b)) {
     const result = operate(data.operator, data.a, data.b);
     // Display the result
     displayNumber(result);
