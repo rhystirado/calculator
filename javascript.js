@@ -140,7 +140,7 @@ let data = {
 function digitClicked() {
   const digit = this.textContent;
   data.displayNumber += digit;
-  displayNumber(data.displayNumber);
+  updateDisplay(data.displayNumber);
 
   // Store a unless there is currently an operator, then store b
   if (!data.operator) {
@@ -176,18 +176,30 @@ function operatorClicked() {
 
   // Perform operation if 'b' exists and the operator is not equal to 
   // the stored operator
-  if (data.operator && !isNaN(data.b)) {
-    const result = operate(data.operator, data.a, data.b);
-    // Display the result
-    displayNumber(result);
+  if (data.operator && !isNaN(data.a) && !isNaN(data.b)) {
     // Store result as 'a' and clear 'b'
-    data.a = result;
+    data.a = calculateResult();
     data.b = null;
     data.displayNumber = '';
   }
 
   // Store the new operator
   data.operator = clickedOperator;
+}
+
+function calculateResult() {
+  // If trying to divide by 0, display a message
+  let result;
+  if (data.b === 0 && data.operator === '/') {
+    result = 0;
+    updateDisplay('pls no');
+  } else {
+    result = operate(data.operator, data.a, data.b);
+    // Display the result
+    updateDisplay(result);
+  }
+
+  return result;
 }
 
 // Clears the display and resets the global data values
@@ -203,11 +215,9 @@ function clearDisplay() {
 function equalsClicked() {
   // Only do something if there is an operator, 'a', and 'b'
   if (data.operator && !isNaN(data.a) && !isNaN(data.b)) {
-    const result = operate(data.operator, data.a, data.b);
-    displayNumber(result);
+    data.a = calculateResult();
     // Store result in 'a' and clear other data values
     resetValues();
-    data.a = result;
     // Reset the selected operators on the UI
     resetSelected();
   }
@@ -238,21 +248,10 @@ function resetSelected() {
   });
 }
 
-// Puts a number onto the display
-function displayNumber(number) {
+// Updates the display with a number
+function updateDisplay(number) {
   const display = document.querySelector('.calculator-display');
   display.textContent = number;
-}
-
-
-
-
-
-
-
-// Update display with a result
-function updateDisplay(result) {
-  display.textContent = result;
 }
 
 
