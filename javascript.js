@@ -252,7 +252,7 @@ function equalsClicked() {
     // Store result in 'a' and clear other data values
     data.a = calculateResult();
     data.b = null;
-    data.display = '';
+    data.displayNumber = '';
     data.operator = null;
     // Reset the selected operators on the UI
     resetSelected();
