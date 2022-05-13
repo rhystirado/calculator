@@ -268,6 +268,11 @@ function equalsClicked() {
 // is calculated
 function decimalClicked() {
   // Add a decimal and display the new number
+  // If the input is empty then add a '0' before the decimal
+  if (data.displayNumber === '') {
+    data.displayNumber += '0';
+  }
+  
   data.displayNumber += '.';
   updateDisplay(data.displayNumber);
 
