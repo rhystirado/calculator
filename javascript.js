@@ -118,9 +118,10 @@ function setupClearButton() {
 
 //---------- Global object to hold data ----------//
 let data = {
-  a: 0,
-  b: 0,
-  operator: '',
+  a: null,
+  b: null,
+  displayNumber: '',
+  operator: null,
 }
 
 
@@ -130,17 +131,22 @@ let data = {
 // Data will always be up to date as it is continually updated
 function digitClicked() {
   const digit = this.textContent;
-  const display = document.querySelector('.calculator-display');
-  display.textContent += digit;
-  data.a = display.textContent;
+  data.displayNumber += digit;
+  displayNumber(data.displayNumber);
+
+  // Store a unless there is currently an operator, then store b
+  if (!data.operator) {
+    data.a = +data.displayNumber;
+  } else {
+    data.b = +data.displayNumber;
+  }
 }
 
 // Updates to selected-operator class to visualise which is being used
 // and removes selected-operator from all other operator buttons
 function operatorClicked() {
-  // Store operator
-  data.operator = this.textContent;
-
+  // Store the clicked operator
+  const clickedOperator = this.textContent;
   // Get the operator buttons
   const buttons = Array.from(document.querySelectorAll('button'));
   const operatorButtons = buttons.filter(button => {
@@ -150,12 +156,30 @@ function operatorClicked() {
 
   // Visual feedback
   operatorButtons.forEach(button => {
-    if (button.textContent === this.textContent) {
+    if (button.textContent === clickedOperator) {
       button.classList.add('selected-operator');
     } else {
       button.classList.remove('selected-operator');
     }
   });
+
+  // Clear the display number for the next result
+  data.displayNumber = '';
+
+  // Perform operation if 'b' exists and the operator is not equal to 
+  // the stored operator
+  if (data.operator && data.b && data.operator != clickedOperator) {
+    const result = operate(data.operator, data.a, data.b);
+    // Display the result
+    displayNumber(result);
+    // Store result as 'a' and clear 'b'
+    data.a = result;
+    data.b = null;
+    data.displayNumber = '';
+  }
+
+  // Store the new operator
+  data.operator = clickedOperator;
 }
 
 // Clears the display and resets the global data values
@@ -167,12 +191,17 @@ function clearDisplay() {
   resetSelected();
 }
 
+//---------- Helper functions ----------//
+
+// Reset the global values
 function resetValues() {
-  data.a = 0;
-  data.b = 0;
-  data.operator = 0;
+  data.a = null;
+  data.b = null;
+  data.displayNumber = '';
+  data.operator = null;
 }
 
+// Reset the selected operator buttons on the user interface
 function resetSelected() {
   // Get the operator buttons
   const buttons = Array.from(document.querySelectorAll('button'));
@@ -187,6 +216,16 @@ function resetSelected() {
   });
 }
 
+// Puts a number onto the display
+function displayNumber(number) {
+  const display = document.querySelector('.calculator-display');
+  display.textContent = number;
+}
+
+
+
+
+
 
 
 // Update display with a result
@@ -196,31 +235,13 @@ function updateDisplay(result) {
 
 
 
-// Take a string with one operator and convert it to the numbers and the operator
-function splitInput(str) {
-  // Split on the operator and group the delimeter to keep it
-  const parts = str.split(/([\+\-\*\/])/g);
-  const input = {
-    a: parseInt(parts[0]),
-    b: parseInt(parts[2]),
-    operator: parts[1]
-  }
-  return input;
-}
-
-const result = 0;
-
-// Get the display string and compute the answer
-function compute() {
-  // Get input from calculator display
-  const input = splitInput(display.textContent);
-  const result = operate(input.operator, input.a, input.b);
-  // Update display
-  updateDisplay(result);
-  console.log(result);
-}
+// If an operator or equals is pressed and there is already an operator and b
+// then do the operation and store the result in a
 
 
+
+
+//---------- Steps to run ----------//
 
 // User presses numbers
 //  - Display numbers
@@ -235,7 +256,14 @@ function compute() {
 //  - Displays result of operate(operator, a, b)
 //  - Stores result as 'a'
 //  - Clears 'b'
-//  - If operator pressed store operator
+//  - If operator pressed store operatorm
+
+
+// If there is no operator - store 'a'
+// If there is an operator - store 'b'
+// If there is an operator and 'b', and another operator or equals is pressed - 
+//    do calculation and store in 'a'
+//    If operator then store as operator
 
 //---------- Main function ----------//
 setupCalculator();
