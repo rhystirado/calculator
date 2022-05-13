@@ -2,22 +2,60 @@
 
 // Add two numbers together
 function add(a, b) {
-  return a + b;
+  // Calculate scale factor for decimals
+  const scaleFactor = calculateScaleFactor(a, b);
+  // Convert decimals to integers and perform addition, then correct for
+  // scale factor
+  return ((a * scaleFactor) + (b * scaleFactor)) / (scaleFactor);
 }
 
 // Subtract two numbers
 function subtract(a, b) {
-  return a - b;
+  // Calculate scale factor for decimals
+  const scaleFactor = calculateScaleFactor(a, b);
+  // Convert decimals to integers and perform addition, then correct for
+  // scale factor
+  return ((a * scaleFactor) - (b * scaleFactor)) / (scaleFactor);
 }
 
 // Multiply two numbers
 function multiply(a, b) {
-  return a * b;
+  // Calculate scale factor for decimals
+  const scaleFactor = calculateScaleFactor(a, b);
+  // Convert decimals to integers and perform multiplication, then correct for
+  // scale factor
+  return (a * scaleFactor) * (b * scaleFactor) / (scaleFactor * scaleFactor);
 }
 
 // Divide two numbers
 function divide(a, b) {
-  return a / b;
+  // Calculate scale factor for decimals
+  const scaleFactor = calculateScaleFactor(a, b);
+  // Convert decimals to integers and perform division, which also removes the
+  // scale factor
+  return (a * scaleFactor) / (b * scaleFactor);
+}
+
+// Scale decimals to integers and return the scale factor
+function calculateScaleFactor(a, b) {
+  // If a is not an integer, convert it to an integer and keep number of scales
+  let scaleFactorA = 1;
+  let scaledA = a;
+  while (scaledA % 1 != 0) {
+    scaledA *= 10;
+    scaleFactorA *= 10;
+  }
+  
+  // Test b to check if scale factor neeeded
+  let scaleFactorB = 1;
+  let scaledB = b;
+  while (scaledB % 1 != 0) {
+    scaledB *= 10;
+    scaleFactorB *= 10;
+  }
+  
+  // Use largest scale factor to perform calculations
+  return (scaleFactorA >= scaleFactorB) ? scaleFactorA : scaleFactorB;
 }
 
 // Takes an operator and two numbers and calls the appropriate function
@@ -52,7 +90,7 @@ function setupCalculator() {
                       '7', '8', '9', '*',
                       '4', '5', '6', '-',
                       '1', '2', '3', '+',
-                      '0', '', '', '='];
+                      '0', '', '.', '='];
   
   for (const button of buttonList) {
     const buttonElement = document.createElement('button');
@@ -78,6 +116,9 @@ function setupButtons() {
 
   // Equals button
   setupEqualsButton();
+
+  // Decimal button
+  setupDecimalButton();
 }
 
 // Display digits when they are pressed
@@ -113,7 +154,7 @@ function setupOperatorButtons() {
 function setupClearButton() {
   const buttons = Array.from(document.querySelectorAll('button'));
   const clearButton = buttons.find(button => button.textContent === 'AC');
-  clearButton.addEventListener('click', clearDisplay);
+  clearButton.addEventListener('click', clearClicked);
 }
 
 // Equals button calculates the result when pressed
@@ -123,6 +164,12 @@ function setupEqualsButton() {
   equalsButton.addEventListener('click', equalsClicked);
 }
 
+// Decimal button can add up to one decimal point when pressed
+function setupDecimalButton() {
+  const buttons = Array.from(document.querySelectorAll('button'));
+  const decimalButton = buttons.find(button => button.textContent === '.');
+  decimalButton.addEventListener('click', decimalClicked);
+}
 
 //---------- Global object to hold data ----------//
 let data = {
@@ -185,30 +232,17 @@ function operatorClicked() {
 
   // Store the new operator
   data.operator = clickedOperator;
-}
-
-function calculateResult() {
-  // If trying to divide by 0, display a message
-  let result;
-  if (data.b === 0 && data.operator === '/') {
-    result = 0;
-    updateDisplay('pls no');
-  } else {
-    result = operate(data.operator, data.a, data.b);
-    // Display the result
-    updateDisplay(result);
-  }
-
-  return result;
+  resetDecimal();
 }
 
 // Clears the display and resets the global data values
-function clearDisplay() {
+function clearClicked() {
   const display = document.querySelector('.calculator-display');
   display.textContent = '';
 
   resetValues();
   resetSelected();
+  resetDecimal();
 }
 
 // Operates on the data and displays the result
@@ -223,6 +257,27 @@ function equalsClicked() {
     // Reset the selected operators on the UI
     resetSelected();
   }
+}
+
+// Adds a decimal place to the current value
+// Disables itself after it has been pressed and only re-enables when a result
+// is calculated
+function decimalClicked() {
+  // Add a decimal and display the new number
+  data.displayNumber += '.';
+  updateDisplay(data.displayNumber);
+
+  // Store as 'a' unless there is currently an operator, then store as 'b'
+  if (!data.operator) {
+    data.a = +data.displayNumber;
+  } else {
+    data.b = +data.displayNumber;
+  }
+
+  // Disable the decimal button
+  const buttons = Array.from(document.querySelectorAll('button'));
+  const decimalButton = buttons.find(button => button.textContent === '.');
+  decimalButton.removeEventListener('click', decimalClicked);
 }
 
 //---------- Helper functions ----------//
@@ -256,11 +311,31 @@ function updateDisplay(number) {
   display.textContent = number;
 }
 
+// Calculate and display the result
+function calculateResult() {
+  // If trying to divide by 0, display a message
+  let result;
+  if (data.b === 0 && data.operator === '/') {
+    result = 0;
+    updateDisplay('pls no');
+  } else {
+    result = operate(data.operator, data.a, data.b);
+    // Display the result
+    updateDisplay(result);
+  }
 
+  // Re-enable the decimal point
+  resetDecimal();
 
-// If an operator or equals is pressed and there is already an operator and b
-// then do the operation and store the result in a
+  return result;
+}
 
+// Enables the decimal button
+function resetDecimal() {
+  const buttons = Array.from(document.querySelectorAll('button'));
+  const decimalButton = buttons.find(button => button.textContent === '.');
+  decimalButton.addEventListener('click', decimalClicked);
+}
 
 
 
