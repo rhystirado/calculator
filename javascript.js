@@ -215,9 +215,11 @@ function clearDisplay() {
 function equalsClicked() {
   // Only do something if there is an operator, 'a', and 'b'
   if (data.operator && !isNaN(data.a) && !isNaN(data.b)) {
-    data.a = calculateResult();
     // Store result in 'a' and clear other data values
-    resetValues();
+    data.a = calculateResult();
+    data.b = null;
+    data.display = '';
+    data.operator = null;
     // Reset the selected operators on the UI
     resetSelected();
   }
