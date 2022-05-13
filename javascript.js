@@ -75,6 +75,9 @@ function setupButtons() {
 
   // Clear
   setupClearButton();
+
+  // Equals button
+  setupEqualsButton();
 }
 
 // Display digits when they are pressed
@@ -111,8 +114,13 @@ function setupClearButton() {
   const buttons = Array.from(document.querySelectorAll('button'));
   const clearButton = buttons.find(button => button.textContent === 'AC');
   clearButton.addEventListener('click', clearDisplay);
+}
 
-  
+// Equals button calculates the result when pressed
+function setupEqualsButton() {
+  const buttons = Array.from(document.querySelectorAll('button'));
+  const equalsButton = buttons.find(button => button.textContent === '=');
+  equalsButton.addEventListener('click', equalsClicked);
 }
 
 
@@ -189,6 +197,20 @@ function clearDisplay() {
 
   resetValues();
   resetSelected();
+}
+
+// Operates on the data and displays the result
+function equalsClicked() {
+  // Only do something if there is an operator, 'a', and 'b'
+  if (data.operator && !isNaN(data.a) && !isNaN(data.b)) {
+    const result = operate(data.operator, data.a, data.b);
+    displayNumber(result);
+    // Store result in 'a' and clear other data values
+    resetValues();
+    data.a = result;
+    // Reset the selected operators on the UI
+    resetSelected();
+  }
 }
 
 //---------- Helper functions ----------//
