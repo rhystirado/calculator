@@ -223,7 +223,9 @@ function operatorClicked() {
 
   // Perform operation if 'b' exists and the operator is not equal to 
   // the stored operator
-  if (data.operator && !isNaN(data.a) && !isNaN(data.b)) {
+  const isValidOperation = data.operator && !isNaN(data.a) && !isNaN(data.b) &&
+    data.a && data.b;
+  if (isValidOperation) {
     // Store result as 'a' and clear 'b'
     data.a = calculateResult();
     data.b = null;
@@ -247,8 +249,10 @@ function clearClicked() {
 
 // Operates on the data and displays the result
 function equalsClicked() {
-  // Only do something if there is an operator, 'a', and 'b'
-  if (data.operator && !isNaN(data.a) && !isNaN(data.b)) {
+  // Only do something if there is an operator, 'a', and 'b' and it is a number
+  const isValidOperation = data.operator && !isNaN(data.a) && !isNaN(data.b) &&
+    data.a && data.b;
+  if (isValidOperation) {
     // Store result in 'a' and clear other data values
     data.a = calculateResult();
     data.b = null;
@@ -267,10 +271,13 @@ function decimalClicked() {
   data.displayNumber += '.';
   updateDisplay(data.displayNumber);
 
-  // Store as 'a' unless there is currently an operator, then store as 'b'
-  if (!data.operator) {
+  // Store as 'a' unless there is currently an operator and a is valid input,
+  // then store as 'b'
+  const isValidInputA = !isNaN(data.a) && data.a;
+  const isValidInputB = !isNaN(data.b) && data.b;
+  if (!data.operator && isValidInputA) {
     data.a = +data.displayNumber;
-  } else {
+  } else if (!data.operator && isValidInputB) {
     data.b = +data.displayNumber;
   }
 
