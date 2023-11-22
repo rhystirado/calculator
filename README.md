@@ -8,13 +8,10 @@ To operate the calculator, the user can click the buttons to perform mathematica
 
 Available operations:
 
-\+ - Addition
-
-\- - Subtraction
-
-\* - Multiplication
-
-\/ - Division
+- Addition (\+)
+- Subtraction (\-)
+- Multiplication (\*)
+- Division (\/)
 
 ## Learning Outcomes
 
