@@ -7,9 +7,13 @@ Calculator built using JavaScript, HTML, and CSS.
 To operate the calculator, the user can click the buttons to perform mathematical operations.
 
 Available operations:
+
 \+ - Addition
+
 \- - Subtraction
+
 \* - Multiplication
+
 \/ - Division
 
 ## Learning Outcomes
