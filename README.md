@@ -15,7 +15,7 @@ Available operations:
 
 ## Learning Outcomes
 
-- Practice breaking a problem down into modular parts for development/
+- Practice breaking a problem down into modular parts for development
 - Practice working with JavaScript string and array manipulation
 - Practice manipulating the DOM
 - Practice using event listeners
