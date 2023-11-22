@@ -4,10 +4,19 @@
 
 Calculator built using JavaScript, HTML, and CSS.
 
+To operate the calculator, the user can click the buttons to perform mathematical operations.
+
+Available operations:
++ - Addition
+- - Subtraction
+* - Multiplication
+/ - Division
+
 ## Learning Outcomes
 
+- Practice breaking a problem down into modular parts for development/
 - Practice working with JavaScript string and array manipulation
-- Practice manipulating DOM
+- Practice manipulating the DOM
 - Practice using event listeners
 
 ## Availability
