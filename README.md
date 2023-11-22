@@ -4,7 +4,7 @@
 
 Calculator built using JavaScript, HTML, and CSS.
 
-To operate the calculator, the user can click the buttons to perform mathematical operations.
+To operate the calculator, the user can click the buttons to perform mathematical operations. Input can be cleared with the AC button.
 
 Available operations:
 
